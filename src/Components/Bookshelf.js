@@ -9,7 +9,7 @@ const Bookshelf = ({title, filter, books}) => (
         {books
           .filter( (book) => book.shelf === filter )
           .map( (book) => (
-            <Book key={book.id} data={book} />
+            <Book key={book.id} book={book} />
         ))}
       </ol>
     </div>
