@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ReactLoading from 'react-loading';
 import Bookshelf from './Bookshelf';
 import * as BooksAPI from '../utils/BooksAPI';
 
 class ListBooks extends Component {
   state = {
+    loading: true,
     books: [],
     currentlyReading: [],
     wantToRead: [],
@@ -17,7 +19,8 @@ class ListBooks extends Component {
         books,
         currentlyReading: this.filterShelf(books, 'currentlyReading'),
         wantToRead: this.filterShelf(books, 'wantToRead'),
-        read: this.filterShelf(books, 'read')
+        read: this.filterShelf(books, 'read'),
+        loading: false
       });
     });
   }
@@ -36,15 +39,31 @@ class ListBooks extends Component {
     }
   };
 
+  // render() {
+  //   return (
+  //     this.state.loading ? <h1>Loading...</h1> : <h2>loaded</h2>
+  //   );
+
+  // }
+
+  renderLoading() {}
+
   render() {
-    const { books, currentlyReading, wantToRead, read } = this.state;
+    const { books, currentlyReading, wantToRead, read, loading } = this.state;
     return (
       <div className="list-books">
         <div className="list-books-title">
           <h1>MyReads</h1>
         </div>
-        <div className="list-books-content">
-          <div>
+
+        {loading && (
+          <center>
+            <ReactLoading type="bubbles" color="#444" />
+          </center>
+        )}
+
+        {!loading && (
+          <div className="list-books-content">
             <Bookshelf
               title="Currently Reading"
               books={books}
@@ -64,7 +83,7 @@ class ListBooks extends Component {
               onChange={this.update}
             />
           </div>
-        </div>
+        )}
         <div className="open-search">
           <Link to="/search">Add a book</Link>
         </div>
