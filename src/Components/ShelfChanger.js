@@ -4,7 +4,15 @@ import * as BooksAPI from '../utils/BooksAPI';
 class ShelfChanger extends Component {
 
   state = {
-    value: this.props.book.shelf
+    value: 'none'
+  }
+
+  componentDidMount() {
+    if(this.props.book.shelf) {
+      this.setState({
+        value: this.props.book.shelf
+      })
+    }
   }
 
   handleChange = (event) => {
@@ -13,7 +21,9 @@ class ShelfChanger extends Component {
     this.setState({ value });
     
     BooksAPI.update(book, value).then((res) => {
-      console.log(res);
+      if(this.props.onChange) {
+        this.props.onChange(res);
+      }
     })
   }
 
