@@ -7,27 +7,26 @@ import * as BooksAPI from '../utils/BooksAPI';
 
 // todo add debounce to search
 class Search extends Component {
-
   state = {
     books: [],
     query: ''
-  }
+  };
 
-  handleChange = (event) => {
+  handleChange = event => {
     const query = event.target.value.trim();
 
     this.setState({
       query
-    })
+    });
 
-    BooksAPI.search(query).then((books) => {
-      if(Array.isArray(books)) {
+    BooksAPI.search(query).then(books => {
+      if (Array.isArray(books)) {
         this.setState({ books });
       } else {
         this.setState({ books: [] });
       }
-    })
-  }
+    });
+  };
 
   render() {
     const { books, query } = this.state;
@@ -35,7 +34,9 @@ class Search extends Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to='/' className='close-search'>Close</Link>
+          <Link to="/" className="close-search">
+            Close
+          </Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -45,15 +46,17 @@ class Search extends Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input type="text" value={query} onChange={this.handleChange} placeholder="Search by title or author"/>
-
+            <input
+              type="text"
+              value={query}
+              onChange={this.handleChange}
+              placeholder="Search by title or author"
+            />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {books.map( (book) => (
-              <Book key={book.id} book={book} />
-            ))}
+            {books.map(book => <Book key={book.id} book={book} />)}
           </ol>
         </div>
       </div>
