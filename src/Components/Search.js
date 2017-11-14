@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import escapeRegExp from 'escape-string-regexp';
-// import sortBy from 'sort-by';
+import { DebounceInput } from 'react-debounce-input';
 import Book from './Book';
 import * as BooksAPI from '../utils/BooksAPI';
 
-// todo add debounce to search
 class Search extends Component {
   state = {
-    books: [],
-    query: ''
+    books: []
   };
 
   handleChange = event => {
     const query = event.target.value.trim();
-
-    this.setState({
-      query
-    });
 
     BooksAPI.search(query).then(books => {
       if (Array.isArray(books)) {
@@ -29,7 +22,7 @@ class Search extends Component {
   };
 
   render() {
-    const { books, query } = this.state;
+    const { books } = this.state;
 
     return (
       <div className="search-books">
@@ -46,9 +39,8 @@ class Search extends Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input
-              type="text"
-              value={query}
+            <DebounceInput
+              debounceTimeout={500}
               onChange={this.handleChange}
               placeholder="Search by title or author"
             />
