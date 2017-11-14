@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ReactLoading from 'react-loading';
 import Bookshelf from './Bookshelf';
+import If from './If';
 import * as BooksAPI from '../utils/BooksAPI';
 
 class ListBooks extends Component {
@@ -39,15 +40,6 @@ class ListBooks extends Component {
     }
   };
 
-  // render() {
-  //   return (
-  //     this.state.loading ? <h1>Loading...</h1> : <h2>loaded</h2>
-  //   );
-
-  // }
-
-  renderLoading() {}
-
   render() {
     const { books, currentlyReading, wantToRead, read, loading } = this.state;
     return (
@@ -56,13 +48,13 @@ class ListBooks extends Component {
           <h1>MyReads</h1>
         </div>
 
-        {loading && (
+        <If test={loading}>
           <center>
             <ReactLoading type="bubbles" color="#444" />
           </center>
-        )}
+        </If>
 
-        {!loading && (
+        <If test={!loading}>
           <div className="list-books-content">
             <Bookshelf
               title="Currently Reading"
@@ -83,7 +75,8 @@ class ListBooks extends Component {
               onChange={this.update}
             />
           </div>
-        )}
+        </If>
+
         <div className="open-search">
           <Link to="/search">Add a book</Link>
         </div>
