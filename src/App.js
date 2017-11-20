@@ -4,8 +4,6 @@ import ListBooks from './Components/ListBooks';
 import Search from './Components/Search';
 import './App.css';
 
-// todo add loading state
-// configure trim spaces
 const BooksApp = () => (
   <div className="app">
     <Route exact path="/" component={ListBooks} />

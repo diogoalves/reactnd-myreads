@@ -9,9 +9,7 @@ class Search extends Component {
     books: []
   };
 
-  handleChange = event => {
-    const query = event.target.value.trim();
-
+  handleChange = query => {
     BooksAPI.search(query).then(books => {
       if (Array.isArray(books)) {
         this.setState({ books });
@@ -41,7 +39,7 @@ class Search extends Component {
             */}
             <DebounceInput
               debounceTimeout={500}
-              onChange={this.handleChange}
+              onChange={event => this.handleChange(event.target.value.trim())}
               placeholder="Search by title or author"
             />
           </div>
