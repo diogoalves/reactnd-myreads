@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import ReactLoading from 'react-loading';
 import * as BooksAPI from '../utils/BooksAPI';
-import If from './If';
 
 class ShelfChanger extends Component {
   state = {
-    value: 'none',
-    loading: false
+    value: 'none'
   };
 
   componentDidMount() {
@@ -20,7 +17,7 @@ class ShelfChanger extends Component {
   handleChange = event => {
     const { book } = this.props;
     const { value } = event.target;
-    this.setState({ value, loading: true });
+    this.setState({ value });
 
     BooksAPI.update(book, value).then(res => {
       if (this.props.onChange) {
@@ -30,7 +27,6 @@ class ShelfChanger extends Component {
   };
 
   render() {
-    const { loading } = this.state;
     return (
       <div className="book-shelf-changer">
         <select onChange={this.handleChange} value={this.state.value}>
@@ -42,12 +38,6 @@ class ShelfChanger extends Component {
           <option value="read">Read</option>
           <option value="none">None</option>
         </select>
-
-        <If test={loading}>
-          <center>
-            <ReactLoading type="bubbles" color="#444" />
-          </center>
-        </If>
       </div>
     );
   }
