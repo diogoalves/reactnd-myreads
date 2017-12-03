@@ -15,27 +15,41 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.update();
-  }
-
-  update = () => {
     BooksAPI.getAll().then(books => {
       this.setState({
         books,
         loading: false
       });
     });
-  };
+  }
 
   updateShelf = (book, value) => {
-    const { books } = this.state;
+    const { books, searchResults } = this.state;
+    const updatedBookIndex = books.findIndex(b => b.id === book.id);
+    if (updatedBookIndex >= 0) {
+      books[updatedBookIndex].shelf = book.shelf;
+    } else {
+      books.push(book);
+    }
+
     const updatedBooks = books.map(b => {
       if (b.id === book.id) {
         b.shelf = value;
       }
       return b;
     });
-    this.setState({ books: updatedBooks, loading: true });
+    const updatedSearchResults = searchResults.map(b => {
+      if (b.id === book.id) {
+        b.shelf = value;
+      }
+      return b;
+    });
+
+    this.setState({
+      books: updatedBooks,
+      searchResults: updatedSearchResults,
+      loading: true
+    });
 
     BooksAPI.update(book, value).then(res => {
       this.setState({ loading: false });
