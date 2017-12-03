@@ -1,43 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ReactLoading from 'react-loading';
 import If from './If';
 import Bookshelf from './Bookshelf';
 
-const ListBooks = ({
-  loading,
-  books,
-  currentlyReading,
-  wantToRead,
-  read,
-  update
-}) => (
+const ListBooks = ({ books, onShelfChange }) => (
   <div className="list-books">
     <div className="list-books-title">
       <h1>MyReads</h1>
     </div>
 
-    <If test={loading}>
-      <center>
-        <ReactLoading type="bubbles" color="#444" />
-      </center>
-    </If>
-
-    <If test={!loading}>
+    <If test={books && books.length > 0}>
       <div className="list-books-content">
         <Bookshelf
           title="Currently Reading"
-          books={books}
-          subset={currentlyReading}
-          onChange={update}
+          books={books.filter(b => b.shelf === 'currentlyReading')}
+          onShelfChange={onShelfChange}
         />
         <Bookshelf
           title="Want to Read"
-          books={books}
-          subset={wantToRead}
-          onChange={update}
+          books={books.filter(b => b.shelf === 'wantToRead')}
+          onShelfChange={onShelfChange}
         />
-        <Bookshelf title="Read" books={books} subset={read} onChange={update} />
+        <Bookshelf
+          title="Read"
+          books={books.filter(b => b.shelf === 'read')}
+          onShelfChange={onShelfChange}
+        />
       </div>
     </If>
 

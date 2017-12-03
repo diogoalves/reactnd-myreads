@@ -1,17 +1,13 @@
 import React from 'react';
 import Book from './Book';
 
-const Bookshelf = ({ title, books, subset, onChange }) => (
+const Bookshelf = ({ title, books, onShelfChange }) => (
   <div className="bookshelf">
     <h2 className="bookshelf-title">{title}</h2>
     <div className="bookshelf-books">
       <ol className="books-grid">
-        {subset.map(id => (
-          <Book
-            key={id}
-            book={books.find(b => b.id === id)}
-            onChange={onChange}
-          />
+        {books.map(book => (
+          <Book key={book.id} book={book} onShelfChange={onShelfChange} />
         ))}
       </ol>
     </div>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as BooksAPI from '../utils/BooksAPI';
 
 class ShelfChanger extends Component {
   state = {
@@ -15,15 +14,9 @@ class ShelfChanger extends Component {
   }
 
   handleChange = event => {
-    const { book } = this.props;
+    const { book, onShelfChange } = this.props;
     const { value } = event.target;
-    this.setState({ value });
-
-    BooksAPI.update(book, value).then(res => {
-      if (this.props.onChange) {
-        this.props.onChange(res, book.id, value);
-      }
-    });
+    onShelfChange(book, value);
   };
 
   render() {
