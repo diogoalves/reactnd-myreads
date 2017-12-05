@@ -15,9 +15,12 @@ class ShelfChanger extends Component {
 
   handleChange = event => {
     const { book, onShelfChange } = this.props;
+    const prevState = this.state;
     const { value } = event.target;
     this.setState({ value });
-    onShelfChange(book, value);
+
+    const undo = () => this.setState(prevState);
+    onShelfChange(book, value, undo);
   };
 
   render() {

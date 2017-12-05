@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import ReactLoading from 'react-loading';
 import './App.css';
 import * as BooksAPI from '../utils/BooksAPI';
 import ListBooks from './ListBooks';
 import Search from './Search';
-import If from './If';
-
-const Loading = ({ show }) => (
-  <If test={show}>
-    <div className="loading">
-      <center>
-        <ReactLoading type="bubbles" color="#444" delay={0} />
-      </center>
-    </div>
-  </If>
-);
+import Loading from './Loading';
+import { updateBook, updateOrAddBook } from '../utils/updateBook';
 
 class App extends Component {
   state = {
@@ -33,37 +23,26 @@ class App extends Component {
     });
   }
 
-  updateShelf = (book, value) => {
-    const { books, searchResults } = this.state;
-    const updatedBookIndex = books.findIndex(b => b.id === book.id);
-    if (updatedBookIndex >= 0) {
-      books[updatedBookIndex].shelf = book.shelf;
-    } else {
-      books.push(book);
-    }
-
-    const updatedBooks = books.map(b => {
-      if (b.id === book.id) {
-        b.shelf = value;
-      }
-      return b;
-    });
-    const updatedSearchResults = searchResults.map(b => {
-      if (b.id === book.id) {
-        b.shelf = value;
-      }
-      return b;
+  updateShelf = (book, newShelfValue, undo) => {
+    let rollbackState = {};
+    this.setState(prevState => {
+      const { books, searchResults } = prevState;
+      rollbackState = { ...prevState };
+      return {
+        loading: true,
+        books: updateOrAddBook(books, book, newShelfValue),
+        searchResults: updateBook(searchResults, book, newShelfValue)
+      };
     });
 
-    this.setState({
-      books: updatedBooks,
-      searchResults: updatedSearchResults,
-      loading: true
-    });
-
-    BooksAPI.update(book, value).then(res => {
-      this.setState({ loading: false });
-    });
+    BooksAPI.update(book, newShelfValue)
+      .then(res => {
+        this.setState({ loading: false });
+      })
+      .catch(error => {
+        this.setState(rollbackState);
+        undo();
+      });
   };
 
   handleSearch = query => {
