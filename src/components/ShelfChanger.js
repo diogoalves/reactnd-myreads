@@ -15,7 +15,7 @@ class ShelfChanger extends Component {
 
   handleChange = event => {
     const { book, onShelfChange } = this.props;
-    const prevState = this.state;
+    const prevState = { ...this.state };
     const { value } = event.target;
     this.setState({ value });
 
