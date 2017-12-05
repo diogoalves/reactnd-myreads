@@ -11,3 +11,5 @@ const Loading = ({ show }) => (
     </div>
   </If>
 );
+
+export default Loading;
