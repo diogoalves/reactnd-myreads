@@ -7,6 +7,16 @@ import ListBooks from './ListBooks';
 import Search from './Search';
 import If from './If';
 
+const Loading = ({ show }) => (
+  <If test={show}>
+    <div className="loading">
+      <center>
+        <ReactLoading type="bubbles" color="#444" delay={0} />
+      </center>
+    </div>
+  </If>
+);
+
 class App extends Component {
   state = {
     loading: true,
@@ -103,13 +113,7 @@ class App extends Component {
           )}
         />
 
-        <div className="loading">
-          <If test={loading}>
-            <center>
-              <ReactLoading type="bubbles" color="#444" delay={0} />
-            </center>
-          </If>
-        </div>
+        <Loading show={loading} />
       </div>
     );
   }
